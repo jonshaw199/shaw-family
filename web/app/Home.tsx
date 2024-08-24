@@ -82,7 +82,7 @@ export default function Home() {
             <NavLink
               key={`media_card_${i}`}
               onClick={() => setSectionId(Sections.MEDIA)}
-              style={{ width: "400px" }}
+              style={{ width: "420px" }}
               className={styles.card}
             >
               <MediaCard previewSrc={previewSrc} text={text} title={title} />

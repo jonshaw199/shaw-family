@@ -8,8 +8,14 @@ import Home from "@/app/Home";
 import { Container, Fade } from "react-bootstrap";
 import { SectionProvider, useSectionContext } from "./contexts/SectionContext";
 import { Sections } from "@/app/common";
+import { Nanum_Myeongjo } from "next/font/google";
 
 const FADE_TRANSITION_MS = 300;
+
+const nanumMyengjo = Nanum_Myeongjo({
+  weight: "700",
+  subsets: ["latin"],
+});
 
 const sectionComponents: { [key: string]: ReactElement } = {
   [Sections.EVENTS]: <UnderConstruction />,
@@ -41,8 +47,20 @@ function Main() {
 
 export default function Page() {
   return (
-    <SectionProvider defaultSectionId="home">
-      <Main />
-    </SectionProvider>
+    <>
+      <style jsx global>{`
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        nav .nav-link {
+          font-family: ${nanumMyengjo.style.fontFamily};
+        }
+      `}</style>
+      <SectionProvider defaultSectionId="home">
+        <Main />
+      </SectionProvider>
+    </>
   );
 }
