@@ -13,14 +13,11 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
-# Build the React app for production
+# Build the Next.js app for production
 RUN npm run build
-
-# Install a simple web server to serve the React app
-RUN npm install -g serve
-
-# Serve the React app
-CMD ["serve", "-s", "build"]
 
 # Expose port 3000
 EXPOSE 3000
+
+# Start the Next.js app using its built-in server
+CMD ["npm", "run", "start"]
