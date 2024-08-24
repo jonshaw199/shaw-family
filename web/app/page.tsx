@@ -1,62 +1,48 @@
 "use client";
 
-import Background from "@/app/components/layout/Background";
-import { ReactElement, forwardRef, useEffect, useState } from "react";
+import { ReactElement, forwardRef, useEffect, useMemo, useState } from "react";
 import Navbar from "@/app/Navbar";
-import { Section, sections } from "@/app/common";
 import styles from "@/app/page.module.css";
 import UnderConstruction from "@/app/components/ui/UnderConstruction";
 import Home from "@/app/Home";
 import { Container, Fade } from "react-bootstrap";
+import { SectionProvider, useSectionContext } from "./contexts/SectionContext";
+import { Sections } from "@/app/common";
 
 const FADE_TRANSITION_MS = 300;
 
-const sectionComponents: { [key in Section]: ReactElement } = {
-  events: <UnderConstruction />,
-  home: <Home />,
-  media: <UnderConstruction />,
+const sectionComponents: { [key: string]: ReactElement } = {
+  [Sections.EVENTS]: <UnderConstruction />,
+  [Sections.HOME]: <Home />,
+  [Sections.MEDIA]: <UnderConstruction />,
 };
 
-export default function Main() {
-  const [curSection, setCurSection] = useState(Section.HOME);
-  const [targetSection, setTargetSection] = useState<Section>();
-
-  useEffect(() => {
-    const onHashChanged = () => {
-      const hash = window.location.hash.substring(1);
-      if (Object.values(Section).includes(hash as Section)) {
-        setTargetSection(hash as Section);
-      } else {
-        console.error(`Section not found: '${hash}'; unable to navigate`);
-      }
-    };
-
-    window.addEventListener("hashchange", onHashChanged);
-
-    return () => {
-      window.removeEventListener("hashchange", onHashChanged);
-    };
-  }, []);
+function Main() {
+  const { sectionId } = useSectionContext();
+  // For smooth transition/animation from one section to another
+  const [sectionIdInternal, setSectionIdInternal] = useState(sectionId);
 
   const fadeIn = () =>
     setTimeout(() => {
-      if (targetSection) {
-        setCurSection(targetSection);
-        setTargetSection(undefined);
-      }
+      setSectionIdInternal(sectionId);
     }, FADE_TRANSITION_MS);
 
   return (
-    <Background
-      src={sections[curSection].background}
-      containerProps={{ className: styles.bg }}
-    >
-      <Navbar darkMode={sections[curSection].darkMode} />
-      <Fade in={!targetSection} onExit={fadeIn} appear>
+    <div className={styles.container}>
+      <Navbar />
+      <Fade in={sectionId == sectionIdInternal} onExit={fadeIn} appear>
         <Container className={styles.content} fluid>
-          {sectionComponents[curSection]}
+          {sectionComponents[sectionIdInternal]}
         </Container>
       </Fade>
-    </Background>
+    </div>
+  );
+}
+
+export default function Page() {
+  return (
+    <SectionProvider defaultSectionId="home">
+      <Main />
+    </SectionProvider>
   );
 }

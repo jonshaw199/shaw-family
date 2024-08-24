@@ -10,9 +10,10 @@ function getWindowDimensions() {
 }
 
 export default function useWindowDimensions() {
-  const [windowDimensions, setWindowDimensions] = useState(
-    getWindowDimensions()
-  );
+  const [windowDimensions, setWindowDimensions] = useState({
+    width: 0,
+    height: 0,
+  });
 
   useEffect(() => {
     function handleResize() {
@@ -20,6 +21,10 @@ export default function useWindowDimensions() {
     }
 
     window.addEventListener("resize", handleResize);
+
+    // Set dimensions when page loads
+    setWindowDimensions(getWindowDimensions());
+
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 

@@ -5,6 +5,8 @@ import { Indie_Flower } from "next/font/google";
 import classNames from "classnames";
 import MediaCard, { MediaCardProps } from "@/app/components/ui/MediaCard";
 import { useEffect, useState } from "react";
+import { useSectionContext } from "@/app/contexts/SectionContext";
+import { Sections } from "@/app/common";
 
 const MEDIA_TRANSITION_DELAY_MS = 200;
 
@@ -32,6 +34,8 @@ const mediaCards: MediaCardProps[] = [
 ];
 
 export default function Home() {
+  const { setSectionId } = useSectionContext();
+
   const [isMediaVisible, setIsMediaVisible] = useState(false);
 
   useEffect(() => {
@@ -52,13 +56,13 @@ export default function Home() {
               styles["events-cta"],
             ])}
           >
-            What's cooking?
+            What&apos;s cooking?
           </div>
           <div className="d-flex gap-2 flex-wrap justify-content-center">
-            <NavLink href="#events">
+            <NavLink onClick={() => setSectionId(Sections.EVENTS)}>
               <Button variant="light">View Upcoming Events</Button>
             </NavLink>
-            <NavLink href="#events">
+            <NavLink onClick={() => setSectionId(Sections.EVENTS)}>
               <Button variant="dark">Create New Event</Button>
             </NavLink>
           </div>
@@ -77,7 +81,7 @@ export default function Home() {
           {mediaCards.map(({ previewSrc, text, title }, i) => (
             <NavLink
               key={`media_card_${i}`}
-              href="#media"
+              onClick={() => setSectionId(Sections.MEDIA)}
               style={{ width: "400px" }}
               className={styles.card}
             >

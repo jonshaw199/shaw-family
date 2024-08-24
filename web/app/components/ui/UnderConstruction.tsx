@@ -1,7 +1,14 @@
+import Image from "next/image";
+
 export default function UnderConstruction() {
   return (
     <div className="d-flex flex-column align-items-center justify-content-center h-100">
-      <img src="/construction.png" width="50%" style={{ maxWidth: "300px" }} />
+      <Image
+        src="/construction.png"
+        width={300}
+        height={300}
+        alt="Dog wearing construction hat"
+      />
       <h4 className="text-warning">Under Construction</h4>
     </div>
   );

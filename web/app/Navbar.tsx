@@ -4,8 +4,30 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import RbNavbar from "react-bootstrap/Navbar";
 import Offcanvas from "react-bootstrap/Offcanvas";
-import { Section, sections } from "./common";
 import Logo from "@/app/Logo";
+import Image from "next/image";
+import { useSectionContext } from "./contexts/SectionContext";
+import { Sections } from "@/app/common";
+
+type NavItem = {
+  id: string;
+  name: string;
+};
+
+const navItems: NavItem[] = [
+  {
+    id: Sections.HOME,
+    name: "Home",
+  },
+  {
+    id: Sections.EVENTS,
+    name: "Events",
+  },
+  {
+    id: Sections.MEDIA,
+    name: "Media",
+  },
+];
 
 type NavbarProps = {
   darkMode?: boolean;
@@ -13,10 +35,11 @@ type NavbarProps = {
 
 export default function Navbar({ darkMode }: NavbarProps) {
   const { width } = useWindowDimensions();
+  const { sectionId, setSectionId } = useSectionContext();
 
   const expand = useMemo(() => width > 1000, [width]);
 
-  return (
+  return width ? (
     <RbNavbar
       expand={expand}
       data-bs-theme={darkMode ? "dark" : "light"}
@@ -25,15 +48,17 @@ export default function Navbar({ darkMode }: NavbarProps) {
     >
       <Container>
         <RbNavbar.Brand
-          href="#home"
+          onClick={() => setSectionId(Sections.HOME)}
           className="d-flex align-items-center gap-3"
         >
-          <img
+          <Image
             src="/icon.png"
             width="38"
+            height="38"
             style={{
               filter: darkMode ? "invert(1)" : undefined,
             }}
+            alt="Shaw Family Icon"
           />
           <Logo darkMode={darkMode} />
         </RbNavbar.Brand>
@@ -45,18 +70,23 @@ export default function Navbar({ darkMode }: NavbarProps) {
         >
           <Offcanvas.Header closeButton>
             <Offcanvas.Title id={`offcanvasNavbarLabel-expand-${expand}`}>
-              <img src="/icon.png" width="40" />
+              <Image
+                src="/icon.png"
+                height="40"
+                width="40"
+                alt="Shaw Family Icon"
+              />
             </Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
             <Nav className="justify-content-end flex-grow-1">
-              {Object.keys(sections).map((s) => (
+              {navItems.map(({ id, name }) => (
                 <Nav.Link
-                  key={`nav_link_${s}`}
-                  href={`#${s}`}
-                  active={window.location.hash == `#${s}`}
+                  key={`nav_link_${id}`}
+                  onClick={() => setSectionId(id)}
+                  active={sectionId == id}
                 >
-                  {sections[s as Section].displayName}
+                  {name}
                 </Nav.Link>
               ))}
             </Nav>
@@ -64,5 +94,5 @@ export default function Navbar({ darkMode }: NavbarProps) {
         </RbNavbar.Offcanvas>
       </Container>
     </RbNavbar>
-  );
+  ) : null;
 }
