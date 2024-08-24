@@ -1,0 +1,22 @@
+.events {
+  height: 500px;
+}
+
+.events-cta {
+  font-size: 40px;
+}
+
+.slide-in {
+  transform: translateY(100%); /* Start below the viewport */
+  opacity: 0; /* Start with zero opacity */
+  transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+}
+
+.slide-in-visible {
+  transform: translateY(0); /* Slide to the original position */
+  opacity: 1; /* Fade in */
+}
+
+.card:hover {
+  filter: brightness(105%);
+}

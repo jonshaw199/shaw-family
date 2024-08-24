@@ -1,0 +1,63 @@
+.path {
+  stroke-dasharray: 2500; /* Set to a large enough value to cover the length of the path */
+  stroke-dashoffset: 2500; /* Start with the path hidden */
+  animation: draw 0.25s linear forwards; /* Draws the path over 5 seconds */
+}
+
+#path1 {
+  animation-delay: 0;
+}
+
+#path2 {
+  animation-delay: 0.25s;
+}
+
+#path3 {
+  animation-delay: 0.5s;
+}
+
+#path4 {
+  animation-delay: 0.75s;
+}
+
+#path5 {
+  animation-delay: 1s;
+}
+
+#path6 {
+  animation-delay: 1.25s;
+}
+
+#path7 {
+  animation-delay: 1.5s;
+}
+
+#path8 {
+  animation-delay: 1.75s;
+}
+
+#path9 {
+  animation-delay: 2s;
+}
+
+#path10 {
+  animation-delay: 2.25s;
+}
+
+#path11 {
+  animation-delay: 2.5s;
+}
+
+#path12 {
+  animation-delay: 2.75s;
+}
+
+#path13 {
+  animation-delay: 3s;
+}
+
+@keyframes draw {
+  to {
+    stroke-dashoffset: 0; /* Ends with the path fully drawn */
+  }
+}
