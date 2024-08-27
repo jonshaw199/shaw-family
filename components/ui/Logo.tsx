@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 //import "./HandwritingAnimation.css";
-import styles from "@/app/Logo.module.css";
+import styles from "@/components/ui/Logo.module.css";
 
 type LogoProps = {
   darkMode?: boolean;

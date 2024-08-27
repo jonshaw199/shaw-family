@@ -1,5 +1,5 @@
 export enum Sections {
-  HOME = "home",
+  HOME = "",
   EVENTS = "events",
   MEDIA = "media",
 }

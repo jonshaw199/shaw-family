@@ -1,66 +1,95 @@
 "use client";
 
-import { ReactElement, forwardRef, useEffect, useMemo, useState } from "react";
-import Navbar from "@/app/Navbar";
+import { Button, Container } from "react-bootstrap";
+import Background from "@/components/layout/Background";
 import styles from "@/app/page.module.css";
-import UnderConstruction from "@/app/components/ui/UnderConstruction";
-import Home from "@/app/Home";
-import { Container, Fade } from "react-bootstrap";
-import { SectionProvider, useSectionContext } from "./contexts/SectionContext";
-import { Sections } from "@/app/common";
-import { Nanum_Myeongjo } from "next/font/google";
+import { Indie_Flower } from "next/font/google";
+import classNames from "classnames";
+import MediaCard, { MediaCardProps } from "@/components/ui/MediaCard";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+import { Sections } from "./common";
 
-const FADE_TRANSITION_MS = 300;
+const MEDIA_TRANSITION_DELAY_MS = 200;
 
-const nanumMyengjo = Nanum_Myeongjo({
-  weight: "700",
-  subsets: ["latin"],
+const indie = Indie_Flower({
+  subsets: ["latin"], // Select the subset you need
+  weight: ["400"],
 });
 
-const sectionComponents: { [key: string]: ReactElement } = {
-  [Sections.EVENTS]: <UnderConstruction />,
-  [Sections.HOME]: <Home />,
-  [Sections.MEDIA]: <UnderConstruction />,
-};
-
-function Main() {
-  const { sectionId } = useSectionContext();
-  // For smooth transition/animation from one section to another
-  const [sectionIdInternal, setSectionIdInternal] = useState(sectionId);
-
-  const fadeIn = () =>
-    setTimeout(() => {
-      setSectionIdInternal(sectionId);
-    }, FADE_TRANSITION_MS);
-
-  return (
-    <div className={styles.container}>
-      <Navbar />
-      <Fade in={sectionId == sectionIdInternal} onExit={fadeIn} appear>
-        <Container className={styles.content} fluid>
-          {sectionComponents[sectionIdInternal]}
-        </Container>
-      </Fade>
-    </div>
-  );
-}
+const mediaCards: MediaCardProps[] = [
+  {
+    previewSrc: "/wedding.jpg",
+    title: "Sam's Wedding",
+    text: "An unforgettable experience",
+  },
+  {
+    previewSrc: "/halloween.jpg",
+    title: "Halloween '23",
+    text: "Jason and Samantha carving pumpkins",
+  },
+  {
+    previewSrc: "/lake.jpg",
+    title: "Camping At Lake Michigan",
+    text: "Good times with good people",
+  },
+];
 
 export default function Page() {
+  const [isMediaVisible, setIsMediaVisible] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => setIsMediaVisible(true), MEDIA_TRANSITION_DELAY_MS);
+  }, []);
+
   return (
     <>
-      <style jsx global>{`
-        h1,
-        h2,
-        h3,
-        h4,
-        h5,
-        nav .nav-link {
-          font-family: ${nanumMyengjo.style.fontFamily};
-        }
-      `}</style>
-      <SectionProvider defaultSectionId="home">
-        <Main />
-      </SectionProvider>
+      <Background
+        src="/dinner.mp4"
+        containerProps={{ className: styles.events }}
+      >
+        <Container className="d-flex flex-column align-items-center justify-content-center gap-1 h-100">
+          <div
+            className={classNames([
+              "text-white text-center",
+              indie.className,
+              styles["events-cta"],
+            ])}
+          >
+            What&apos;s cooking?
+          </div>
+          <div className="d-flex gap-2 flex-wrap justify-content-center">
+            <Link href={`/${Sections.EVENTS}`}>
+              <Button variant="light">View Upcoming Events</Button>
+            </Link>
+            <Link href={`/${Sections.EVENTS}`}>
+              <Button variant="dark">Create New Event</Button>
+            </Link>
+          </div>
+        </Container>
+      </Background>
+
+      <Container className="py-3">
+        <h2 className="text-center">Media</h2>
+        <div
+          className={classNames([
+            "d-flex flex-wrap justify-content-center gap-3 py-3",
+            styles["slide-in"],
+            isMediaVisible ? styles["slide-in-visible"] : null,
+          ])}
+        >
+          {mediaCards.map(({ previewSrc, text, title }, i) => (
+            <Link
+              key={`media_card_${i}`}
+              href={`/${Sections.MEDIA}`}
+              style={{ width: "420px" }}
+              className={styles.card}
+            >
+              <MediaCard previewSrc={previewSrc} text={text} title={title} />
+            </Link>
+          ))}
+        </div>
+      </Container>
     </>
   );
 }

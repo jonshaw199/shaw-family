@@ -1,13 +1,16 @@
-import useWindowDimensions from "@/app/hooks/useWindowDimensions";
+import useWindowDimensions from "@/hooks/useWindowDimensions";
 import { useMemo } from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import RbNavbar from "react-bootstrap/Navbar";
 import Offcanvas from "react-bootstrap/Offcanvas";
-import Logo from "@/app/Logo";
+import Logo from "@/components/ui/Logo";
 import Image from "next/image";
-import { useSectionContext } from "./contexts/SectionContext";
 import { Sections } from "@/app/common";
+import Link from "next/link";
+import styles from "@/components/ui/Navbar.module.css";
+import { usePathname } from "next/navigation";
+import classNames from "classnames";
 
 type NavItem = {
   id: string;
@@ -35,7 +38,7 @@ type NavbarProps = {
 
 export default function Navbar({ darkMode }: NavbarProps) {
   const { width } = useWindowDimensions();
-  const { sectionId, setSectionId } = useSectionContext();
+  const pathname = usePathname();
 
   const expand = useMemo(() => width > 1000, [width]);
 
@@ -48,7 +51,7 @@ export default function Navbar({ darkMode }: NavbarProps) {
     >
       <Container>
         <RbNavbar.Brand
-          onClick={() => setSectionId(Sections.HOME)}
+          //onClick={() => setSectionId(Sections.HOME)}
           className="d-flex align-items-center gap-3"
         >
           <Image
@@ -79,15 +82,20 @@ export default function Navbar({ darkMode }: NavbarProps) {
             </Offcanvas.Title>
           </Offcanvas.Header>
           <Offcanvas.Body>
-            <Nav className="justify-content-end flex-grow-1">
+            <Nav className="justify-content-end flex-grow-1 gap-3">
               {navItems.map(({ id, name }) => (
-                <Nav.Link
+                <Link
                   key={`nav_link_${id}`}
-                  onClick={() => setSectionId(id)}
-                  active={sectionId == id}
+                  href={`/${id}`}
+                  className={classNames([
+                    styles.link,
+                    pathname == `/${id}` && styles.active,
+                  ])}
+                  //onClick={() => setSectionId(id)}
+                  //active={sectionId == id}
                 >
                   {name}
-                </Nav.Link>
+                </Link>
               ))}
             </Nav>
           </Offcanvas.Body>

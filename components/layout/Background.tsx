@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 
-import styles from "@/app/components/layout/Background.module.css";
+import styles from "@/components/layout/Background.module.css";
 import classNames from "classnames";
 import { Fade } from "react-bootstrap";
 
